@@ -1,11 +1,10 @@
-package me.udintsev.otus.architect.eventing.order;
+package me.udintsev.otus.architect.idempotence;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import me.udintsev.otus.architect.eventing.order.domain.Order;
-import me.udintsev.otus.architect.eventing.order.domain.OrderItem;
-import me.udintsev.otus.architect.eventing.order.domain.UserOrders;
-import org.assertj.core.api.Assertions;
+import me.udintsev.otus.architect.idempotence.domain.Order;
+import me.udintsev.otus.architect.idempotence.domain.OrderItem;
+import me.udintsev.otus.architect.idempotence.domain.UserOrders;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package me.udintsev.otus.architect.eventing.order.service;
+package me.udintsev.otus.architect.idempotence.service;
 
 import java.util.ConcurrentModificationException;
 

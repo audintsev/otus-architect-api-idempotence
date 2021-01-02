@@ -1,4 +1,4 @@
-package me.udintsev.otus.architect.eventing.order.domain;
+package me.udintsev.otus.architect.idempotence.domain;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 

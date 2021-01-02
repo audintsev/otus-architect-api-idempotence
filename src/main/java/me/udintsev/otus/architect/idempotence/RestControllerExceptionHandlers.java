@@ -1,6 +1,6 @@
-package me.udintsev.otus.architect.eventing.order;
+package me.udintsev.otus.architect.idempotence;
 
-import me.udintsev.otus.architect.eventing.order.service.FingerprintMismatchException;
+import me.udintsev.otus.architect.idempotence.service.FingerprintMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

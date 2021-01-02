@@ -1,6 +1,6 @@
-package me.udintsev.otus.architect.eventing.order.service;
+package me.udintsev.otus.architect.idempotence.service;
 
-import me.udintsev.otus.architect.eventing.order.domain.Order;
+import me.udintsev.otus.architect.idempotence.domain.Order;
 import org.springframework.stereotype.Component;
 
 import java.security.MessageDigest;

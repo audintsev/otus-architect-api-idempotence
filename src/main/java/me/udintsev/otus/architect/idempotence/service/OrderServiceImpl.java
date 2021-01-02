@@ -1,12 +1,12 @@
-package me.udintsev.otus.architect.eventing.order.service;
+package me.udintsev.otus.architect.idempotence.service;
 
 import io.vavr.Lazy;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import me.udintsev.otus.architect.eventing.order.domain.Order;
-import me.udintsev.otus.architect.eventing.order.domain.OrderItem;
-import me.udintsev.otus.architect.eventing.order.domain.OrderStatus;
-import me.udintsev.otus.architect.eventing.order.domain.UserOrders;
+import me.udintsev.otus.architect.idempotence.domain.Order;
+import me.udintsev.otus.architect.idempotence.domain.OrderItem;
+import me.udintsev.otus.architect.idempotence.domain.OrderStatus;
+import me.udintsev.otus.architect.idempotence.domain.UserOrders;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -148,7 +148,10 @@ public class OrderServiceImpl implements OrderService {
 
         Assert.isTrue(ordersInserted == 1, "Expected a single orders entry to be inserted");
 
-        var orderId = orderKeyHolder.getKeyAs(Long.class);
+        var orderId = Optional.ofNullable(orderKeyHolder.getKeys())
+                .map(map -> map.get("id"))
+                .map(Long.class::cast)
+                .orElse(null);
         Assert.notNull(orderId, "DB returned null orderId");
 
         // Now insert order items
@@ -243,7 +246,7 @@ public class OrderServiceImpl implements OrderService {
                 var status = OrderStatus.valueOf(rs.getString("status"));
                 var price = rs.getLong("price");
                 var itemId = rs.getLong("item_id");
-                var quantity = rs.getInt("quantity");
+                var quantity = rs.getInt("item_quantity");
                 var fingerprint = rs.getString("fingerprint");
 
                 ordersAndFingerprintsByUserBy.computeIfAbsent(userId, k -> new AbstractMap.SimpleImmutableEntry<>(fingerprint, new HashMap<>()))

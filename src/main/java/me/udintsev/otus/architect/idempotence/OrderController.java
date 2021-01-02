@@ -1,12 +1,12 @@
-package me.udintsev.otus.architect.eventing.order;
+package me.udintsev.otus.architect.idempotence;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import me.udintsev.otus.architect.eventing.order.domain.Order;
-import me.udintsev.otus.architect.eventing.order.domain.OrderItem;
-import me.udintsev.otus.architect.eventing.order.domain.UserOrders;
-import me.udintsev.otus.architect.eventing.order.service.OrderService;
+import me.udintsev.otus.architect.idempotence.domain.Order;
+import me.udintsev.otus.architect.idempotence.domain.OrderItem;
+import me.udintsev.otus.architect.idempotence.domain.UserOrders;
+import me.udintsev.otus.architect.idempotence.service.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
