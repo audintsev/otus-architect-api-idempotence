@@ -1,0 +1,89 @@
+databaseChangeLog:
+
+  - changeSet:
+      id: bootstrap:user_orders
+      author: system
+      changes:
+        - createTable:
+            tableName: user_orders
+            columns:
+              - column:
+                  name: user_id
+                  type: varchar(255)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: fingerprint
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: bootstrap:orders
+      author: system
+      changes:
+        - createTable:
+            tableName: orders
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: price
+                  type: bigint
+                  constraints:
+                    nullable: false
+        - createIndex:
+            # Allows searching orders for a user
+            indexName: idx_orders_user_id_created_at
+            tableName: orders
+            columns:
+              - column:
+                  name: user_id
+              - column:
+                  name: created_at
+                  descending: true
+
+  - changeSet:
+      id: bootstrap:order_item
+      author: system
+      changes:
+        - createTable:
+            tableName: order_item
+            columns:
+              - column:
+                  name: order_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_order_item_order_id
+                    referencedTableName: orders
+                    referencedColumnNames: id
+              - column:
+                  name: item_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: bigint
