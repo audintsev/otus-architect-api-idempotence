@@ -39,7 +39,7 @@ class OrderControllerTests {
     }
 
     @Test
-    void shouldCreateFirstOrder() throws Exception {
+    void shouldCreateFirstOrderWithNoFingerprint() throws Exception {
         // Create
         var responseContent = mvc.perform(
                 post(OrderController.API_ROOT)
@@ -81,6 +81,33 @@ class OrderControllerTests {
                 .andExpect(jsonPath("orders").isArray())
                 .andExpect(jsonPath("orders.length()").value(1))
                 .andExpect(jsonPath("orders[0].id").value(order.getId()));
+    }
+
+    @Test
+    void shouldCreateFirstOrderWithFingerprint() throws Exception {
+        // Get fingerprint
+        var fingerprint = mvc.perform(get(OrderController.API_ROOT + "/fingerprint")
+                .header("X-User-Id", "john.doe@example.com"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isString())
+                .andReturn().getResponse().getContentAsString();
+
+        assertThat(fingerprint).isNotEmpty();
+
+        // Create
+        mvc.perform(
+                post(OrderController.API_ROOT)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("X-User-Id", "john.doe@example.com")
+                        .content(createOrderRequest(
+                                List.of(
+                                        new OrderItem(10, 1),
+                                        new OrderItem(11, 5)
+                                ),
+                                fingerprint)
+                        )
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test

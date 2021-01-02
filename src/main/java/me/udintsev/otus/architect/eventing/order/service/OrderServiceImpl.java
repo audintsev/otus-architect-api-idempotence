@@ -84,6 +84,12 @@ public class OrderServiceImpl implements OrderService {
     public Tuple2<String, Order> createOrder(String userId, List<OrderItem> items, String fingerprint) {
         Assert.notNull(userId, "userId must not be null");
         Assert.notEmpty(items, "items must not be empty");
+        Assert.notNull(fingerprint, "fingerprint must not be null");
+
+        if (fingerprint.equals(emptyOrdersFingerprint.get())) {
+            // That's actually the first order!
+            return createFirstOrder(userId, items);
+        }
 
         UserOrders orders = getUserOrders(userId);
 
