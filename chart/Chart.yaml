@@ -1,0 +1,16 @@
+apiVersion: v2
+name: arch-api-idempotence
+description: OTUS architect course, homework 18 "API idempotence"
+
+type: application
+
+version: 0.1.0
+appVersion: "latest"
+
+dependencies:
+  - name: postgresql
+    version: 9.x.x
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+    tags:
+      - hw-database

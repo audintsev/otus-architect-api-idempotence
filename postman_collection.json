@@ -1,0 +1,571 @@
+{
+	"info": {
+		"_postman_id": "936b89e5-4c6c-49d7-b53f-2f5e94c35dc3",
+		"name": "OTUS Architect Homework 18 (API Idempotence)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get fingerprint",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[`Status code ${pm.response.code} is 200`] = pm.response.code === 200\r",
+							"\r",
+							"const fingerprint = responseBody\r",
+							"tests[`fingerprint != null`] = fingerprint != null\r",
+							"pm.environment.set(\"fingerprint\", fingerprint);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"email1\", pm.variables.replaceIn('{{$randomEmail}}'))\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Id",
+						"type": "text",
+						"value": "{{email1}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{appUrl}}/api/v1/orders/fingerprint",
+					"host": [
+						"{{appUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders",
+						"fingerprint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create 1st order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 200\", () => {\r",
+							"    pm.expect(pm.response.code).to.equal(200)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Order price is 70\", () => {\r",
+							"    pm.expect(pm.response.json().price).to.equal(70)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Id",
+						"type": "text",
+						"value": "{{email1}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fingerprint\": \"{{fingerprint}}\",\r\n    \"items\": [\r\n        {\r\n            \"itemId\": 10,\r\n            \"quantity\": 2\r\n        },\r\n        {\r\n            \"itemId\": 22,\r\n            \"quantity\": 5\r\n        }\r\n    ]\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{appUrl}}/api/v1/orders",
+					"host": [
+						"{{appUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get fingerprint",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[`Status code ${pm.response.code} is 200`] = pm.response.code === 200\r",
+							"\r",
+							"const fingerprint = responseBody\r",
+							"tests[`fingerprint != null`] = fingerprint != null\r",
+							"pm.environment.set(\"fingerprint\", fingerprint);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Id",
+						"type": "text",
+						"value": "{{email1}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{appUrl}}/api/v1/orders/fingerprint",
+					"host": [
+						"{{appUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders",
+						"fingerprint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create 2nd order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 200\", () => {\r",
+							"    pm.expect(pm.response.code).to.equal(200)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Order price is 110\", () => {\r",
+							"    pm.expect(pm.response.json().price).to.equal(110)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Id",
+						"type": "text",
+						"value": "{{email1}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fingerprint\": \"{{fingerprint}}\",\r\n    \"items\": [\r\n        {\r\n            \"itemId\": 20,\r\n            \"quantity\": 5\r\n        },\r\n        {\r\n            \"itemId\": 21,\r\n            \"quantity\": 6\r\n        }\r\n    ]\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{appUrl}}/api/v1/orders",
+					"host": [
+						"{{appUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Try creating 3rd order by reusing previous fingerprint",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 409\", () => {\r",
+							"    pm.expect(pm.response.code).to.equal(409)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Message matches 'fingerprint.*match'\", () => {\r",
+							"    pm.expect(pm.response.json().message).to.match(/fingerprint.*match/)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Id",
+						"type": "text",
+						"value": "{{email1}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fingerprint\": \"{{fingerprint}}\",\r\n    \"items\": [\r\n        {\r\n            \"itemId\": 31,\r\n            \"quantity\": 7\r\n        },\r\n        {\r\n            \"itemId\": 32,\r\n            \"quantity\": 8\r\n        }\r\n    ]\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{appUrl}}/api/v1/orders",
+					"host": [
+						"{{appUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get fingerprint",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"tests[`Status code ${pm.response.code} is 200`] = pm.response.code === 200\r",
+							"\r",
+							"const fingerprint = responseBody\r",
+							"tests[`fingerprint != null`] = fingerprint != null\r",
+							"pm.environment.set(\"fingerprint\", fingerprint);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Id",
+						"type": "text",
+						"value": "{{email1}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{appUrl}}/api/v1/orders/fingerprint",
+					"host": [
+						"{{appUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders",
+						"fingerprint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create 3rd order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 200\", () => {\r",
+							"    pm.expect(pm.response.code).to.equal(200)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Order price is 150\", () => {\r",
+							"    pm.expect(pm.response.json().price).to.equal(150)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Id",
+						"type": "text",
+						"value": "{{email1}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fingerprint\": \"{{fingerprint}}\",\r\n    \"items\": [\r\n        {\r\n            \"itemId\": 31,\r\n            \"quantity\": 7\r\n        },\r\n        {\r\n            \"itemId\": 32,\r\n            \"quantity\": 8\r\n        }\r\n    ]\r\n}\r\n"
+				},
+				"url": {
+					"raw": "{{appUrl}}/api/v1/orders",
+					"host": [
+						"{{appUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List user's orders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status is 200\", () => {\r",
+							"    pm.expect(pm.response.code).to.equal(200)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"User has three orders\", () => {\r",
+							"    pm.expect(pm.response.json().orders).to.have.length(3)\r",
+							"})\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "X-User-Id",
+						"type": "text",
+						"value": "{{email1}}"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{appUrl}}/api/v1/orders",
+					"host": [
+						"{{appUrl}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"const reqData = (typeof request['data'] === 'object') ? JSON.stringify(request['data'])",
+					"    : (typeof pm.request.body === 'object') ? pm.request.body.toString()",
+					"    : '-';",
+					"",
+					"tests[\"[INFO] Request: \" +  reqData] = true;",
+					"tests[\"[INFO] Response: \" + pm.response.code + \" \" + pm.response.status + \", body: \" + responseBody] = true;",
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://arch.homework"
+		},
+		{
+			"key": "pathPrefix",
+			"value": "/otusapp/audintsev"
+		},
+		{
+			"key": "appUrl",
+			"value": "{{baseUrl}}{{pathPrefix}}"
+		}
+	]
+}

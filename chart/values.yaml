@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image: udintsev/hw18
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  proto: http
+  host: arch.homework
+  pathPrefix: /otusapp/audintsev
+
+postgresql:
+  enabled: true
+  postgresqlPostgresPassword: admin
+  postgresqlUsername: myuser
+  postgresqlPassword: passwd
+  service:
+    port: "5432"
+  initdbScripts:
+    databases.sql: |
+      CREATE DATABASE orders;
